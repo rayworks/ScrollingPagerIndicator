@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import ru.tinkoff.scrollingpagerindicator.SimpleDotsIndicator;
+import ru.tinkoff.scrollingpagerindicator.RecyclerViewAttacher;
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setPadding(screenWidth / 3, 0, screenWidth / 3, 0);
 
-        ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.recycler_indicator);
+        SimpleDotsIndicator recyclerIndicator = findViewById(R.id.recycler_indicator);
         // Consider page in the middle current
-        recyclerIndicator.attachToRecyclerView(recyclerView);
+        recyclerIndicator.setDotsAnimated(true)
+                .attachToPager(recyclerView, new RecyclerViewAttacher());
 
         // Some controls
         NumberPicker pageCountPicker = findViewById(R.id.page_number_picker);
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             pagerIndicator.setVisibleDotCount(newVal);
-            recyclerIndicator.setVisibleDotCount(newVal);
+            //recyclerIndicator.setVisibleDotCount(newVal);
         });
 
         pageCountPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
@@ -71,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
             pagerAdapter.setCount(newVal);
             recyclerAdapter.setCount(newVal);
         });
+
+        SimpleDotsIndicator simpleDotsIndicator = findViewById(R.id.custom_indicator);
+        simpleDotsIndicator.setDotCount(5);
+        simpleDotsIndicator.setCurrentPosition(2);
     }
 
     private int getScreenWidth() {
