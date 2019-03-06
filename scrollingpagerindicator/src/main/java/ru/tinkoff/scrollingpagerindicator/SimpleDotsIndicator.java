@@ -7,6 +7,8 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -204,6 +206,65 @@ public class SimpleDotsIndicator extends IndicatorView {
 
             offsetX += 2 * radius;
             offsetX += dotSpacing; // right padding
+        }
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable parcelable = super.onSaveInstanceState();
+        SavedState savedState = new SavedState(parcelable);
+        savedState.currentIndex = currentPosition;
+        savedState.size = total;
+
+        return savedState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        SavedState savedState = (SavedState) state;
+        super.onRestoreInstanceState(savedState.getSuperState());
+
+        currentPosition = savedState.currentIndex;
+        total = savedState.size;
+
+        requestLayout();
+        invalidate();
+    }
+
+    static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        int currentIndex;
+        int size;
+
+        public SavedState(Parcelable source) {
+            super(source);
+        }
+
+        public SavedState(Parcel source) {
+            super(source);
+
+            currentIndex = source.readInt();
+            size = source.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(currentIndex);
+            out.writeInt(size);
         }
     }
 }
