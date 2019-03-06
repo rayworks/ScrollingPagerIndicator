@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.NumberPicker;
 import android.widget.Toast;
@@ -75,9 +76,18 @@ public class MainActivity extends AppCompatActivity {
             recyclerAdapter.setCount(newVal);
         });
 
-        SimpleDotsIndicator simpleDotsIndicator = findViewById(R.id.custom_indicator);
+        final SimpleDotsIndicator simpleDotsIndicator = findViewById(R.id.custom_indicator);
         simpleDotsIndicator.setDotCount(5);
         simpleDotsIndicator.setCurrentPosition(2);
+
+
+        findViewById(R.id.test_dots).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleDotsIndicator.setDotCount(7);
+                simpleDotsIndicator.setCurrentPosition(2);
+            }
+        });
     }
 
     private int getScreenWidth() {
